@@ -1,0 +1,9 @@
+{
+  "name": "wechat-payment",
+  "author": "yelo",
+  "version": "0.0.1",
+  "dependencies": {
+    "MD5": "~1.2.0",
+    "sha1": "~1.1.0"
+  }
+}
