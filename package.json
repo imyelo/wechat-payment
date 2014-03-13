@@ -5,5 +5,10 @@
   "dependencies": {
     "MD5": "~1.2.0",
     "sha1": "~1.1.0"
+  },
+  "devDependencies": {
+    "chai": "~1.9.0",
+    "sinon": "~1.9.0",
+    "muk": "~0.3.1"
   }
 }
