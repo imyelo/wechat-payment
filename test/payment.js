@@ -75,4 +75,63 @@ describe('case', function () {
       });
     });
   });
+  describe.skip('validateNativePayGetPackage', function () {
+    it('should work', function () {
+      var params = {
+        OpenId: '111222',
+        AppId: 'wxf8b4f85f3a794e77',
+        IsSubscribe: '1',
+        ProductId: '777111666',
+        TimeStamp: '1369743908',
+        NonceStr: 'YvMZOX28YQkoU1i4NdOnlXB1',
+        AppSignature: 'a9274e4032a0fec8285f147730d88400392acb9e'
+      };
+      var payment = new Payment(
+        'wxf8b4f85f3a794e77',
+        '2Wozy2aksie1puXUBpWD8oZxiD1DfQuEaiC7KcRATv1Ino3mdopKaPGQQ7TtkNySuAmCaDCrw4xhPY5qKTBl7Fzm0RgR3c0WaVYIXZARsxzHV2x7iwPPzOz94dnwPWSn',
+        '1900090055',
+        '8934e7d15453e97507ef794cf7b0519d'
+        );
+      expect(payment.validateNativePayGetPackage(params)).to.be.true;
+    });
+  });
+  describe.skip('getDeliverNotify', function () {
+    it('should work', function () {
+      var params = {
+        "openid" : "oX99MDgNcgwnz3zFN3DNmo8uwa-w",
+        "transid" : "111112222233333",
+        "out_trade_no" : "555666uuu",
+        "deliver_timestamp" : "1369745073",
+        "deliver_status" : "1",
+        "deliver_msg" : "ok",
+      };
+      var payment = new Payment(
+        'wwwwb4f85f3a797777',
+        '2Wozy2aksie1puXUBpWD8oZxiD1DfQuEaiC7KcRATv1Ino3mdopKaPGQQ7TtkNySuAmCaDCrw4xhPY5qKTBl7Fzm0RgR3c0WaVYIXZARsxzHV2x7iwPPzOz94dnwPWSn',
+        '1900090055',
+        '8934e7d15453e97507ef794cf7b0519d'
+        );
+      expect(payment.getDeliverNotify(params)['app_signature']).to.be.equal('53cca9d47b883bd4a5c85a9300df3da0cb48565c');
+    });
+  });
+  describe.skip('validateAlarmAppSignature', function () {
+    it('should work', function () {
+      var params = {
+        AppId: 'wxf8b4f85f3a794e77',
+        ErrorType: '1001',
+        Description: '错误描述',
+        AlarmContent: '错误详情',
+        TimeStamp: '1393860740',
+        AppSignature: 'f8164781a303f4d5a944a2dfc68411a8c7e4fbea',
+        SignMethod: 'sha1'
+      };
+      var payment = new Payment(
+        'wxf8b4f85f3a794e77',
+        '2Wozy2aksie1puXUBpWD8oZxiD1DfQuEaiC7KcRATv1Ino3mdopKaPGQQ7TtkNySuAmCaDCrw4xhPY5qKTBl7Fzm0RgR3c0WaVYIXZARsxzHV2x7iwPPzOz94dnwPWSn',
+        '1900090055',
+        '8934e7d15453e97507ef794cf7b0519d'
+        );
+      expect(payment.validateAlarmAppSignature(params)).to.be.true;
+    });
+  });
 });
