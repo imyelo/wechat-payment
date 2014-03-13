@@ -64,7 +64,6 @@ describe('case', function () {
         '2Wozy2aksie1puXUBpWD8oZxiD1DfQuEaiC7KcRATv1Ino3mdopKaPGQQ7TtkNySuAmCaDCrw4xhPY5qKTBl7Fzm0RgR3c0WaVYIXZARsxzHV2x7iwPPzOz94dnwPWSn',
         '8934e7d15453e97507ef794cf7b0519d'
         );
-      console.log(payment.getNativePayRequest(productId));
       expect(payment.getNativePayRequest(productId)).to.be.deep.equal({
         'productid': '123456',
         'appid': 'wxf8b4f85f3a794e77',
