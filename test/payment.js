@@ -33,6 +33,7 @@ describe('case', function () {
       var payment = new Payment(
         'wxf8b4f85f3a794e77',
         '2Wozy2aksie1puXUBpWD8oZxiD1DfQuEaiC7KcRATv1Ino3mdopKaPGQQ7TtkNySuAmCaDCrw4xhPY5qKTBl7Fzm0RgR3c0WaVYIXZARsxzHV2x7iwPPzOz94dnwPWSn',
+        '1900090055',
         '8934e7d15453e97507ef794cf7b0519d'
         );
       expect(payment.getWCPayRequest(order)).to.be.deep.equal({
@@ -62,6 +63,7 @@ describe('case', function () {
       var payment = new Payment(
         'wxf8b4f85f3a794e77',
         '2Wozy2aksie1puXUBpWD8oZxiD1DfQuEaiC7KcRATv1Ino3mdopKaPGQQ7TtkNySuAmCaDCrw4xhPY5qKTBl7Fzm0RgR3c0WaVYIXZARsxzHV2x7iwPPzOz94dnwPWSn',
+        '1900090055',
         '8934e7d15453e97507ef794cf7b0519d'
         );
       expect(payment.getNativePayRequest(productId)).to.be.deep.equal({
