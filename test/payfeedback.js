@@ -14,7 +14,7 @@ var PARTNERID = '1900090055';
 var PARTNERKEY = '8934e7d15453e97507ef794cf7b0519d';
 
 var middleware = require('../lib/middleware');
-var PayFeedback = middleware;
+var PayFeedback = middleware.PayFeedback;
 
 var errorHandler = function (err, req, res, next) {
   if (err) {
