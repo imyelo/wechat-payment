@@ -29,7 +29,7 @@ describe('case', function () {
       request: sinon.spy(),
       confirm: sinon.spy(),
       reject: sinon.spy(),
-      done: sinon.spy()
+      other: sinon.spy()
     };
     before(function () {
       app.use('/', PayFeedback(APPID, PAYSIGNKEY, PARTNERID, PARTNERKEY)
@@ -46,7 +46,7 @@ describe('case', function () {
           res.end('');
         })
         .done(function (message, req, res, next) {
-          spies.done.apply(this, arguments);
+          spies.other.apply(this, arguments);
           res.end('');
         })
       );
@@ -56,7 +56,7 @@ describe('case', function () {
       spies.request.reset();
       spies.confirm.reset();
       spies.reject.reset();
-      spies.done.reset();
+      spies.other.reset();
     });
     it('request', function (done) {
       request(app)
@@ -80,7 +80,7 @@ describe('case', function () {
           });
           expect(spies.confirm.called).to.be.false;
           expect(spies.reject.called).to.be.false;
-          expect(spies.done.called).to.be.false;
+          expect(spies.other.called).to.be.false;
           done();
         });
     });
@@ -103,7 +103,7 @@ describe('case', function () {
             SignMethod: 'sha1'
           });
           expect(spies.reject.called).to.be.false;
-          expect(spies.done.called).to.be.false;
+          expect(spies.other.called).to.be.false;
           done();
         });
     });
@@ -126,7 +126,7 @@ describe('case', function () {
             AppSignature: 'b6f95a2368dd81952c4d7198e5102acd1fdd601a',
             SignMethod: 'sha1'
           });
-          expect(spies.done.called).to.be.false;
+          expect(spies.other.called).to.be.false;
           done();
         });
     });
@@ -140,7 +140,7 @@ describe('case', function () {
           expect(spies.request.called).to.be.false;
           expect(spies.confirm.called).to.be.false;
           expect(spies.reject.called).to.be.false;
-          expect(spies.done.args[0][0]).to.be.deep.equal({
+          expect(spies.other.args[0][0]).to.be.deep.equal({
             OpenId: '111222',
             AppId: 'wxd930ea5d5a258f4f',
             TimeStamp: '1369743511',
@@ -157,18 +157,11 @@ describe('case', function () {
         .send(template.require('unexpect_feedback'))
         .end(function (err, result) {
           expect(err).to.be.null;
-          expect(result.text).to.be.empty;
+          expect(result.text).to.be.equal('Invalid signature');
           expect(spies.request.called).to.be.false;
           expect(spies.confirm.called).to.be.false;
           expect(spies.reject.called).to.be.false;
-          expect(spies.done.args[0][0]).to.be.deep.equal({
-            OpenId: '111222',
-            AppId: 'wxd930ea5d5a258f4f',
-            TimeStamp: '1369743511',
-            MsgType: 'foobar',
-            AppSignature: 'b6f95a2368dd81952c4d7198e5102acd1fdd601a',
-            SignMethod: 'sha1'
-          });
+          expect(spies.other.called).to.be.false;
           done();
         });
     });
