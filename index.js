@@ -1,1 +1,2 @@
-module.exports = require('./lib/payment');
+exports.Payment = require('./lib/payment').Payment;
+exports.middleware = require('./lib/middleware');

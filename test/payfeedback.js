@@ -13,7 +13,8 @@ var PAYSIGNKEY = "L8LrMqqeGRxST5reouB0K66CaYAWpqhAVsq7ggKkxHCOastWksvuX1uvmvQclx
 var PARTNERID = '1900090055';
 var PARTNERKEY = '8934e7d15453e97507ef794cf7b0519d';
 
-var PayFeedback = require('../lib/payfeedback');
+var middleware = require('../lib/middleware');
+var PayFeedback = middleware;
 
 var errorHandler = function (err, req, res, next) {
   if (err) {
@@ -23,147 +24,145 @@ var errorHandler = function (err, req, res, next) {
   res.end(err.message);
 };
 
-describe('case', function () {
-  describe('payfeedback', function () {
-    var spies = {
-      request: sinon.spy(),
-      confirm: sinon.spy(),
-      reject: sinon.spy(),
-      other: sinon.spy()
-    };
-    before(function () {
-      app.use('/', PayFeedback(APPID, PAYSIGNKEY, PARTNERID, PARTNERKEY)
-        .request(function (message, req, res, next) {
-          spies.request.apply(this, arguments);
-          res.end('');
-        })
-        .confirm(function (message, req, res, next) {
-          spies.confirm.apply(this, arguments);
-          res.end('');
-        })
-        .reject(function (message, req, res, next) {
-          spies.reject.apply(this, arguments);
-          res.end('');
-        })
-        .done(function (message, req, res, next) {
-          spies.other.apply(this, arguments);
-          res.end('');
-        })
-      );
-      app.use('/', errorHandler);
-    });
-    afterEach(function () {
-      spies.request.reset();
-      spies.confirm.reset();
-      spies.reject.reset();
-      spies.other.reset();
-    });
-    it('request', function (done) {
-      request(app)
-        .post('/')
-        .send(template.require('request'))
-        .end(function (err, result) {
-          expect(err).to.be.null;
-          expect(result.text).to.be.empty;
-          expect(spies.request.args[0][0]).to.be.deep.equal({
-            OpenId: '111222',
-            AppId: 'wxd930ea5d5a258f4f',
-            TimeStamp: '1369743511',
-            MsgType: 'request',
-            FeedBackId: '5883726847655944563',
-            TransId: '10123312412321435345',
-            Reason: '商品质量有问题',
-            Solution: '补发货给我',
-            ExtInfo: '明天六点前联系我 18610847266',
-            AppSignature: 'b6f95a2368dd81952c4d7198e5102acd1fdd601a',
-            SignMethod: 'sha1'
-          });
-          expect(spies.confirm.called).to.be.false;
-          expect(spies.reject.called).to.be.false;
-          expect(spies.other.called).to.be.false;
-          done();
+describe('payfeedback', function () {
+  var spies = {
+    request: sinon.spy(),
+    confirm: sinon.spy(),
+    reject: sinon.spy(),
+    other: sinon.spy()
+  };
+  before(function () {
+    app.use('/', PayFeedback(APPID, PAYSIGNKEY, PARTNERID, PARTNERKEY)
+      .request(function (message, req, res, next) {
+        spies.request.apply(this, arguments);
+        res.end('');
+      })
+      .confirm(function (message, req, res, next) {
+        spies.confirm.apply(this, arguments);
+        res.end('');
+      })
+      .reject(function (message, req, res, next) {
+        spies.reject.apply(this, arguments);
+        res.end('');
+      })
+      .done(function (message, req, res, next) {
+        spies.other.apply(this, arguments);
+        res.end('');
+      })
+    );
+    app.use('/', errorHandler);
+  });
+  afterEach(function () {
+    spies.request.reset();
+    spies.confirm.reset();
+    spies.reject.reset();
+    spies.other.reset();
+  });
+  it('request', function (done) {
+    request(app)
+      .post('/')
+      .send(template.require('request'))
+      .end(function (err, result) {
+        expect(err).to.be.null;
+        expect(result.text).to.be.empty;
+        expect(spies.request.args[0][0]).to.be.deep.equal({
+          OpenId: '111222',
+          AppId: 'wxd930ea5d5a258f4f',
+          TimeStamp: '1369743511',
+          MsgType: 'request',
+          FeedBackId: '5883726847655944563',
+          TransId: '10123312412321435345',
+          Reason: '商品质量有问题',
+          Solution: '补发货给我',
+          ExtInfo: '明天六点前联系我 18610847266',
+          AppSignature: 'b6f95a2368dd81952c4d7198e5102acd1fdd601a',
+          SignMethod: 'sha1'
         });
-    });
-    it('confirm', function (done) {
-      request(app)
-        .post('/')
-        .send(template.require('confirm'))
-        .end(function (err, result) {
-          expect(err).to.be.null;
-          expect(result.text).to.be.empty;
-          expect(spies.request.called).to.be.false;
-          expect(spies.confirm.args[0][0]).to.be.deep.equal({
-            OpenId: '111222',
-            AppId: 'wxd930ea5d5a258f4f',
-            TimeStamp: '1369743511',
-            MsgType: 'confirm',
-            FeedBackId: '5883726847655944563',
-            Reason: '商品质量有问题',
-            AppSignature: 'b6f95a2368dd81952c4d7198e5102acd1fdd601a',
-            SignMethod: 'sha1'
-          });
-          expect(spies.reject.called).to.be.false;
-          expect(spies.other.called).to.be.false;
-          done();
+        expect(spies.confirm.called).to.be.false;
+        expect(spies.reject.called).to.be.false;
+        expect(spies.other.called).to.be.false;
+        done();
+      });
+  });
+  it('confirm', function (done) {
+    request(app)
+      .post('/')
+      .send(template.require('confirm'))
+      .end(function (err, result) {
+        expect(err).to.be.null;
+        expect(result.text).to.be.empty;
+        expect(spies.request.called).to.be.false;
+        expect(spies.confirm.args[0][0]).to.be.deep.equal({
+          OpenId: '111222',
+          AppId: 'wxd930ea5d5a258f4f',
+          TimeStamp: '1369743511',
+          MsgType: 'confirm',
+          FeedBackId: '5883726847655944563',
+          Reason: '商品质量有问题',
+          AppSignature: 'b6f95a2368dd81952c4d7198e5102acd1fdd601a',
+          SignMethod: 'sha1'
         });
-    });
-    it('reject', function (done) {
-      request(app)
-        .post('/')
-        .send(template.require('reject'))
-        .end(function (err, result) {
-          expect(err).to.be.null;
-          expect(result.text).to.be.empty;
-          expect(spies.request.called).to.be.false;
-          expect(spies.confirm.called).to.be.false;
-          expect(spies.reject.args[0][0]).to.be.deep.equal({
-            OpenId: '111222',
-            AppId: 'wxd930ea5d5a258f4f',
-            TimeStamp: '1369743511',
-            MsgType: 'reject',
-            FeedBackId: '5883726847655944563',
-            Reason: '商品质量有问题',
-            AppSignature: 'b6f95a2368dd81952c4d7198e5102acd1fdd601a',
-            SignMethod: 'sha1'
-          });
-          expect(spies.other.called).to.be.false;
-          done();
+        expect(spies.reject.called).to.be.false;
+        expect(spies.other.called).to.be.false;
+        done();
+      });
+  });
+  it('reject', function (done) {
+    request(app)
+      .post('/')
+      .send(template.require('reject'))
+      .end(function (err, result) {
+        expect(err).to.be.null;
+        expect(result.text).to.be.empty;
+        expect(spies.request.called).to.be.false;
+        expect(spies.confirm.called).to.be.false;
+        expect(spies.reject.args[0][0]).to.be.deep.equal({
+          OpenId: '111222',
+          AppId: 'wxd930ea5d5a258f4f',
+          TimeStamp: '1369743511',
+          MsgType: 'reject',
+          FeedBackId: '5883726847655944563',
+          Reason: '商品质量有问题',
+          AppSignature: 'b6f95a2368dd81952c4d7198e5102acd1fdd601a',
+          SignMethod: 'sha1'
         });
-    });
-    it('other_feedback', function (done) {
-      request(app)
-        .post('/')
-        .send(template.require('other_feedback'))
-        .end(function (err, result) {
-          expect(err).to.be.null;
-          expect(result.text).to.be.empty;
-          expect(spies.request.called).to.be.false;
-          expect(spies.confirm.called).to.be.false;
-          expect(spies.reject.called).to.be.false;
-          expect(spies.other.args[0][0]).to.be.deep.equal({
-            OpenId: '111222',
-            AppId: 'wxd930ea5d5a258f4f',
-            TimeStamp: '1369743511',
-            MsgType: 'foobar',
-            AppSignature: 'b6f95a2368dd81952c4d7198e5102acd1fdd601a',
-            SignMethod: 'sha1'
-          });
-          done();
+        expect(spies.other.called).to.be.false;
+        done();
+      });
+  });
+  it('other_feedback', function (done) {
+    request(app)
+      .post('/')
+      .send(template.require('other_feedback'))
+      .end(function (err, result) {
+        expect(err).to.be.null;
+        expect(result.text).to.be.empty;
+        expect(spies.request.called).to.be.false;
+        expect(spies.confirm.called).to.be.false;
+        expect(spies.reject.called).to.be.false;
+        expect(spies.other.args[0][0]).to.be.deep.equal({
+          OpenId: '111222',
+          AppId: 'wxd930ea5d5a258f4f',
+          TimeStamp: '1369743511',
+          MsgType: 'foobar',
+          AppSignature: 'b6f95a2368dd81952c4d7198e5102acd1fdd601a',
+          SignMethod: 'sha1'
         });
-    });
-    it('unexpect_feedback', function (done) {
-      request(app)
-        .post('/')
-        .send(template.require('unexpect_feedback'))
-        .end(function (err, result) {
-          expect(err).to.be.null;
-          expect(result.text).to.be.equal('Invalid signature');
-          expect(spies.request.called).to.be.false;
-          expect(spies.confirm.called).to.be.false;
-          expect(spies.reject.called).to.be.false;
-          expect(spies.other.called).to.be.false;
-          done();
-        });
-    });
+        done();
+      });
+  });
+  it('unexpect_feedback', function (done) {
+    request(app)
+      .post('/')
+      .send(template.require('unexpect_feedback'))
+      .end(function (err, result) {
+        expect(err).to.be.null;
+        expect(result.text).to.be.equal('Invalid signature');
+        expect(spies.request.called).to.be.false;
+        expect(spies.confirm.called).to.be.false;
+        expect(spies.reject.called).to.be.false;
+        expect(spies.other.called).to.be.false;
+        done();
+      });
   });
 });
