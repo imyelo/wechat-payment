@@ -1,4 +1,4 @@
-var template = require('template-cache');
+var template = require('template-cache').namespace('test');
 var path = require('path');
 
 template.load(path.join(__dirname, './support/tpl/'));
