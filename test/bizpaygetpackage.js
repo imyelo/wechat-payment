@@ -70,7 +70,7 @@ describe('bizpaygetpackage', function () {
         expect(result.text.trim()).to.be.deep.equal('\
 <xml>\
 <AppId><![CDATA[wxd930ea5d5a258f4f]]></AppId>\
-<Package><![CDATA[bank_type=WX&#38;body=XXX&#38;fee_type=1&#38;input_charset=GBK&#38;notify_url=http%3a%2f%2fwww.qq.com&#38;out_trade_no=16642817866003386000&#38;partner=1900000109&#38;spbill_create_ip=127.0.0.1&#38;total_fee=1&#38;sign=BEEF37AD19575D92E191C1E4B1474CA9]]></Package>\
+<Package><![CDATA[bank_type=WX&body=XXX&fee_type=1&input_charset=GBK&notify_url=http%3a%2f%2fwww.qq.com&out_trade_no=16642817866003386000&partner=1900000109&spbill_create_ip=127.0.0.1&total_fee=1&sign=BEEF37AD19575D92E191C1E4B1474CA9]]></Package>\
 <TimeStamp>189026618</TimeStamp>\
 <NonceStr><![CDATA[adssdasssd13d]]></NonceStr>\
 <RetCode>0</RetCode>\
