@@ -15,6 +15,7 @@ var PARTNERKEY = '8934e7d15453e97507ef794cf7b0519d';
 
 var middleware = require('../lib/middleware');
 var BizPayGetPackage = middleware.BizPayGetPackage;
+var common = require('../lib/common');
 
 var errorHandler = function (err, req, res, next) {
   if (err) {
@@ -30,13 +31,35 @@ describe('bizpaygetpackage', function () {
     app.use('/', BizPayGetPackage(APPID, PAYSIGNKEY, PARTNERID, PARTNERKEY)
       .done(function (message, req, res, next) {
         spy.apply(this, arguments);
-        res.end('');
+        res.reply({
+          bank_type: 'WX',
+          fee_type: '1',
+          body: 'XXX',
+          input_charset: 'GBK',
+          partner: '1900000109',
+          total_fee: '1',
+          spbill_create_ip: '127.0.0.1',
+          out_trade_no: '16642817866003386000',
+          notify_url: 'http://www.qq.com'
+        }, {
+          retcode: 0,
+          reterrmsg: ''
+        });
       })
     );
     app.use('/', errorHandler);
+    muk(common, 'getTimestamp', function () {
+      return "189026618";
+    }),
+    muk(common, 'getNonceStr', function () {
+      return "adssdasssd13d";
+    });
   });
   afterEach(function () {
     spy.reset();
+  });
+  after(function () {
+    muk.restore();
   });
   it('request', function (done) {
     request(app)
@@ -44,7 +67,17 @@ describe('bizpaygetpackage', function () {
       .send(template.require('bizpaygetpackage'))
       .end(function (err, result) {
         expect(err).to.be.null;
-        expect(result.text).to.be.empty;
+        expect(result.text.trim()).to.be.deep.equal('\
+<xml>\
+<AppId><![CDATA[wxd930ea5d5a258f4f]]></AppId>\
+<Package><![CDATA[bank_type=WX&#38;body=XXX&#38;fee_type=1&#38;input_charset=GBK&#38;notify_url=http%3a%2f%2fwww.qq.com&#38;out_trade_no=16642817866003386000&#38;partner=1900000109&#38;spbill_create_ip=127.0.0.1&#38;total_fee=1&#38;sign=BEEF37AD19575D92E191C1E4B1474CA9]]></Package>\
+<TimeStamp>189026618</TimeStamp>\
+<NonceStr><![CDATA[adssdasssd13d]]></NonceStr>\
+<RetCode>0</RetCode>\
+<RetErrMsg><![CDATA[]]></RetErrMsg>\
+<AppSignature><![CDATA[93419f8e3c6b433da66562d67af1a4abdb4e17ba]]></AppSignature>\
+<SignMethod><![CDATA[sha1]]></SignMethod>\
+</xml>'.trim());
         expect(spy.args[0][0]).to.be.deep.equal({
           OpenId: '111222',
           AppId: 'wxd930ea5d5a258f4f',
