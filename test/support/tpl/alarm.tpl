@@ -1,0 +1,9 @@
+<xml>
+<AppId><![CDATA[wxd930ea5d5a258f4f]]></AppId>
+<ErrorType>1001</ErrorType>
+<Description><![CDATA[错误描述]]></Description>
+<AlarmContent><![CDATA[错误详情]]></AlarmContent>
+<TimeStamp>1393860740</TimeStamp>
+<AppSignature><![CDATA[a7fdeb6930a2a070da542d2da9c674a55d10972c]]></AppSignature>
+<SignMethod><![CDATA[sha1]]></SignMethod>
+</xml>
