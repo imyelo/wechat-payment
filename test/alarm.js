@@ -25,7 +25,7 @@ var errorHandler = function (err, req, res, next) {
   res.end(err.message);
 };
 
-describe('bizpaygetpackage', function () {
+describe('alarm', function () {
   var spy = sinon.spy();
   before(function () {
     app.use('/', Alarm(APPID, PAYSIGNKEY, PARTNERID, PARTNERKEY)
