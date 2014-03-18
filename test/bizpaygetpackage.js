@@ -61,7 +61,7 @@ describe('bizpaygetpackage', function () {
   after(function () {
     muk.restore();
   });
-  it('request', function (done) {
+  it('defaults', function (done) {
     request(app)
       .post('/')
       .send(template.require('bizpaygetpackage'))
