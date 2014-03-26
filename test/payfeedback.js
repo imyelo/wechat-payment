@@ -35,19 +35,19 @@ describe('payfeedback', function () {
     app.use('/', PayFeedback(APPID, PAYSIGNKEY, PARTNERID, PARTNERKEY)
       .request(function (message, req, res, next) {
         spies.request.apply(this, arguments);
-        res.end('');
+        res.reply();
       })
       .confirm(function (message, req, res, next) {
         spies.confirm.apply(this, arguments);
-        res.end('');
+        res.reply();
       })
       .reject(function (message, req, res, next) {
         spies.reject.apply(this, arguments);
-        res.end('');
+        res.reply();
       })
       .done(function (message, req, res, next) {
         spies.other.apply(this, arguments);
-        res.end('');
+        res.reply();
       })
     );
     app.use('/', errorHandler);
