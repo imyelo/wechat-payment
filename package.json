@@ -2,7 +2,7 @@
   "name": "wechat-payment",
   "description": "微信支付Node.js基础库",
   "author": "yelo",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "dependencies": {
     "MD5": "~1.2.0",
     "sha1": "~1.1.0",
