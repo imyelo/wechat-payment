@@ -10,7 +10,7 @@ describe('case', function () {
     before(function () {
       muk(common, 'getTimestamp', function () {
         return "189026618";
-      }),
+      });
       muk(common, 'getNonceStr', function () {
         return "adssdasssd13d";
       });
@@ -50,7 +50,7 @@ describe('case', function () {
     before(function () {
       muk(common, 'getTimestamp', function () {
         return "189026618";
-      }),
+      });
       muk(common, 'getNonceStr', function () {
         return "adssdasssd13d";
       });
@@ -72,6 +72,67 @@ describe('case', function () {
         'timestamp': '189026618',
         'noncestr': 'adssdasssd13d',
         'sign': '18c6122878f0e946ae294e016eddda9468de80df'
+      });
+    });
+  });
+  describe.only('getAppPayRequest', function () {
+    before(function () {
+      muk(common, 'getTimestamp', function () {
+        return "1403603502";
+      });
+      muk(common, 'getNonceStr', function () {
+        return "2014062465651751380051";
+      });
+    });
+    after(function () {
+      muk.restore();
+    });
+    it('sign should be 72CDBA945C97E13C18A9CA5B01EDCAD2 (gbk)', function () {
+      var order = {
+        bank_type: 'WX',
+        fee_type: '1',
+        body: '可乐1杯',
+        input_charset: 'GBK',
+        partner: '1900090055',
+        total_fee: '300',
+        spbill_create_ip: '192.168.1.1',
+        out_trade_no: '201408010123456789',
+        notify_url: 'http://foo.bar/path/to'
+      };
+      var payment = new Payment(
+        'wxf8b4f85f3a794e77',
+        '2Wozy2aksie1puXUBpWD8oZxiD1DfQuEaiC7KcRATv1Ino3mdopKaPGQQ7TtkNySuAmCaDCrw4xhPY5qKTBl7Fzm0RgR3c0WaVYIXZARsxzHV2x7iwPPzOz94dnwPWSn',
+        '1900090055',
+        '8934e7d15453e97507ef794cf7b0519d'
+        );
+      expect(payment.getPackage(order, {signOnly: true})).to.be.equal('72CDBA945C97E13C18A9CA5B01EDCAD2');
+    });
+    it('should work', function () {
+      var order = {
+        bank_type: 'WX',
+        fee_type: '1',
+        body: '可乐1杯',
+        input_charset: 'GBK',
+        partner: '1900090055',
+        total_fee: '300',
+        spbill_create_ip: '192.168.1.1',
+        out_trade_no: '201408010123456789',
+        notify_url: 'http://foo.bar/path/to'
+      };
+      var payment = new Payment(
+        'wxf8b4f85f3a794e77',
+        '2Wozy2aksie1puXUBpWD8oZxiD1DfQuEaiC7KcRATv1Ino3mdopKaPGQQ7TtkNySuAmCaDCrw4xhPY5qKTBl7Fzm0RgR3c0WaVYIXZARsxzHV2x7iwPPzOz94dnwPWSn',
+        '1900090055',
+        '8934e7d15453e97507ef794cf7b0519d'
+        );
+      expect(payment.getAppPayRequest('581914', order)).to.be.deep.equal({
+        'appid': 'wxf8b4f85f3a794e77',
+        'noncestr': '2014062465651751380051',
+        'package': 'Sign=WXPay',
+        'app_signature': '22542411bbfd8c9c6932314cdf111a329a49263d',
+        'partnerid': '1900090055',
+        'prepayid': '581914',
+        'timestamp': '1403603502'
       });
     });
   });
